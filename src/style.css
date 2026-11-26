@@ -136,7 +136,7 @@ code {
 
 .stock-nav a[aria-current="page"] {
   background: var(--accent-soft);
-  box-shadow: inset 3px 0 0 var(--accent);
+  color: var(--accent);
   font-weight: 600;
 }
 
