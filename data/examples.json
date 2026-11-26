@@ -1,0 +1,43 @@
+[
+  {
+    "id": "river",
+    "title": "River valley",
+    "camera": "Pentax K-1",
+    "rawUrl": "https://raw.pixls.us/getfile.php/2469/nice/Pentax%20-%20K-1%20-%2014bit%20(3:2).PEF",
+    "credit": "raw.pixls.us contributor",
+    "sourceUrl": "https://raw.pixls.us/",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  {
+    "id": "fruit",
+    "title": "Fruit still life",
+    "camera": "Canon EOS RP",
+    "rawUrl": "https://raw.pixls.us/getfile.php/4671/nice/Canon%20-%20EOS%20RP%20-%203:2.CR3",
+    "credit": "raw.pixls.us contributor",
+    "sourceUrl": "https://raw.pixls.us/",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  {
+    "id": "flower",
+    "title": "Mallow flower",
+    "camera": "Canon EOS R7",
+    "rawUrl": "https://raw.pixls.us/getfile.php/5633/nice/Canon%20-%20EOS%20R7%20-%203:2.CR3",
+    "credit": "raw.pixls.us contributor",
+    "sourceUrl": "https://raw.pixls.us/",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  {
+    "id": "portrait",
+    "title": "Summer portrait",
+    "camera": "Sony (ARW)",
+    "rawUrl": "https://discuss.pixls.us/uploads/short-url/d3JuA2OONxBY9ssM104GkbfZzmJ.ARW",
+    "credit": "fwolny",
+    "sourceUrl": "https://discuss.pixls.us/t/summer-portrait/14077",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "exposureEV": 1.0
+  }
+]

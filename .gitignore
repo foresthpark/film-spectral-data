@@ -30,3 +30,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Raw files downloaded by scripts/render-examples.py
+examples-cache/
