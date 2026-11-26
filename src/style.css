@@ -6,7 +6,10 @@
   --border: #e4e4e0;
   --accent: #b5532a;
   --accent-text: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
   --grid: #ececea;
+  --radius: 10px;
+  --radius-small: 6px;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Menlo, Consolas, monospace;
   color-scheme: light dark;
@@ -24,6 +27,7 @@
     --border: #2f2f33;
     --accent: #e07a4a;
     --accent-text: #141415;
+    --accent-soft: color-mix(in srgb, var(--accent) 18%, transparent);
     --grid: #2a2a2d;
   }
 }
@@ -39,12 +43,20 @@ body {
 
 #app {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  min-height: 100vh;
+  /* minmax(0, ...) lets the content column shrink below its widest chart instead of overflowing. */
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100dvh;
 }
 
 a {
   color: var(--accent);
+}
+
+a:focus-visible,
+.search:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 code {
@@ -52,10 +64,12 @@ code {
   font-size: 0.9em;
 }
 
+/* Sidebar */
+
 .sidebar {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   overflow-y: auto;
   padding: 20px 16px;
   border-right: 1px solid var(--border);
@@ -75,13 +89,18 @@ code {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   background: var(--bg);
   color: var(--text);
   font: inherit;
 }
 
-.stock-nav h2 {
+.browse > summary {
+  display: none;
+}
+
+.stock-nav h2,
+.grid-group h2 {
   margin: 20px 0 6px;
   font-size: 12px;
   font-weight: 600;
@@ -102,10 +121,11 @@ code {
 
 .stock-nav a {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 5px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-small);
   color: var(--text);
   text-decoration: none;
 }
@@ -115,14 +135,23 @@ code {
 }
 
 .stock-nav a[aria-current="page"] {
-  background: var(--accent);
-  color: var(--accent-text);
+  background: var(--accent-soft);
+  box-shadow: inset 3px 0 0 var(--accent);
+  font-weight: 600;
 }
 
 .tag {
-  font-size: 11px;
-  opacity: 0.7;
+  flex: none;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 16px;
+  opacity: 0.6;
 }
+
+/* Content */
 
 .content {
   padding: 32px 40px 64px;
@@ -141,14 +170,23 @@ h1 {
   line-height: 1.2;
 }
 
+.welcome p {
+  max-width: 70ch;
+}
+
 .button {
   display: inline-block;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   background: var(--accent);
   color: var(--accent-text);
   font-weight: 600;
   text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.button:active {
+  transform: translateY(1px);
 }
 
 .datasheet-note,
@@ -159,11 +197,79 @@ h1 {
   font-size: 13px;
 }
 
+/* Home grid */
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr));
+  gap: 16px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.stock-card {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.stock-card img,
+.thumb-empty {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  background: var(--surface);
+}
+
+.stock-card-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.stock-card:hover .stock-card-name > span:first-child {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stock-card img {
+    transition: transform 0.2s ease;
+  }
+
+  .stock-card:hover img {
+    transform: translateY(-2px);
+  }
+}
+
+/* Stock page */
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.facts,
+.chart {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
 .facts {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px 24px;
-  margin: 24px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 16px 24px;
 }
 
 .facts dt {
@@ -173,20 +279,7 @@ h1 {
 
 .facts dd {
   margin: 2px 0 0;
-}
-
-.charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 16px;
-}
-
-.chart {
-  margin: 0;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
+  overflow-wrap: anywhere;
 }
 
 .chart figcaption {
@@ -234,27 +327,7 @@ h1 {
   font-size: 12px;
 }
 
-@media (max-width: 760px) {
-  #app {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    position: static;
-    height: auto;
-    max-height: 45vh;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .content {
-    padding: 20px 16px 48px;
-  }
-
-  .charts {
-    grid-template-columns: 1fr;
-  }
-}
+/* Examples: before/after sliders */
 
 .examples {
   margin-top: 32px;
@@ -265,47 +338,147 @@ h1 {
   margin: 0 0 4px;
 }
 
-.example {
-  margin: 20px 0 0;
-}
-
-.example-pair {
+.example-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
+  gap: 24px 16px;
+  margin-top: 16px;
 }
 
-.example-image {
+.example {
+  margin: 0;
+}
+
+.compare {
+  --split: 50%;
   position: relative;
-}
-
-.example-image img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-small);
   background: var(--surface);
 }
 
-.example-label {
+.compare img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.compare .compare-film {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-size: 12px;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  clip-path: inset(0 0 0 var(--split));
+}
+
+/* The divider line and its grip; the invisible range input on top does the dragging. */
+.compare::before,
+.compare::after {
+  content: "";
+  position: absolute;
+  left: var(--split);
+  pointer-events: none;
+}
+
+.compare::before {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  translate: -1px;
+  background: #fafaf8;
+  box-shadow: 0 0 6px rgb(0 0 0 / 0.35);
+}
+
+.compare::after {
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  translate: -50% -50%;
+  border: 2px solid #fafaf8;
+  border-radius: 50%;
+  background: rgb(20 20 21 / 0.45);
+  box-shadow: 0 0 6px rgb(0 0 0 / 0.35);
+}
+
+.compare:has(.compare-range:focus-visible)::after {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.compare-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  appearance: none;
+}
+
+/* A hairline thumb keeps the input's value aligned with the drawn divider. */
+.compare-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 2px;
+  height: 100%;
+}
+
+.compare-range::-moz-range-thumb {
+  width: 2px;
+  height: 100%;
+  border: 0;
+}
+
+.compare-sides {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .example figcaption {
-  margin-top: 6px;
+  margin-top: 2px;
   color: var(--muted);
   font-size: 12px;
 }
 
+/* Phones */
+
 @media (max-width: 760px) {
-  .example-pair {
-    grid-template-columns: 1fr;
+  #app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    padding: 14px 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .browse > summary {
+    display: block;
+    margin-top: 10px;
+    padding: 6px 0;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .browse[open] .stock-nav {
+    max-height: 50dvh;
+    overflow-y: auto;
+  }
+
+  .content {
+    padding: 20px 16px 48px;
+  }
+
+  .stock-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 }

@@ -30,7 +30,7 @@ export function stockDetail(stock: Stock, stocks: StockSummary[], photos: Exampl
       targetPrint ? `<a href="#/${targetPrint.id}">${escapeHtml(targetPrint.name)}</a>` : "-",
     ],
     ["Measured under", escapeHtml(stock.referenceIlluminant ?? "-")],
-    ["Densitometer", escapeHtml(stock.densitometer ?? "-")],
+    ["Densitometer", escapeHtml(densitometerName(stock.densitometer))],
     ["Profile id", `<code>${stock.id}</code>`],
   ];
 
@@ -40,8 +40,10 @@ export function stockDetail(stock: Stock, stocks: StockSummary[], photos: Exampl
     <h1>${escapeHtml(stock.name)}</h1>
     ${datasheetButton(stock)}
   </header>
-  <dl class="facts">${facts.map(([term, value]) => `<div><dt>${term}</dt><dd>${value}</dd></div>`).join("")}</dl>
-  <div class="charts">${charts(stock)}</div>
+  <div class="charts">
+    <dl class="facts">${facts.map(([term, value]) => `<div><dt>${term}</dt><dd>${value}</dd></div>`).join("")}</dl>
+    ${charts(stock)}
+  </div>
   ${examples(stock.id, stock.name, stock.kind === "Print paper", photos)}
   <footer class="credit">
     <p>${SOURCE_NOTES[stock.source]}</p>
@@ -49,6 +51,13 @@ export function stockDetail(stock: Stock, stocks: StockSummary[], photos: Exampl
     <p>${escapeHtml(stock.license)} <a href="data/licenses/${LICENCE_FILE[stock.source]}">Licence and notices</a></p>
   </footer>
 </article>`;
+}
+
+/** Profiles store densitometers as ids like "status_M"; show "Status M". */
+function densitometerName(id: string | null): string {
+  if (!id) return "-";
+  const name = id.replace(/_/g, " ");
+  return name[0].toUpperCase() + name.slice(1);
 }
 
 function datasheetButton(stock: Stock): string {
